@@ -38,7 +38,9 @@ class FlexSlider_Attachments {
 
   public function shortcode($atts) {
     $a = shortcode_atts( array(
+      'id' => $this->id,
       'tag' => 'flexslider',
+      'carousel' => 'true',
       'animation' => 'slide',
       'animation_loop' => 'false',
       'item_width' => '200',
@@ -50,6 +52,7 @@ class FlexSlider_Attachments {
     ), $atts );
 
     // Convert bools
+    $a['carousel'] = $this->boolean($a['carousel']);
     $a['animation_loop'] = $this->boolean($a['animation_loop']);
     $a['control_nav'] = $this->boolean($a['control_nav']);
     $a['direction_nav'] = $this->boolean($a['direction_nav']);
@@ -60,8 +63,13 @@ class FlexSlider_Attachments {
     $a['slideshow_speed'] = intval($a['slideshow_speed']);
     $a['animation_speed'] = intval($a['animation_speed']);
 
+    // Unset for JSON
     $tag = $a['tag'];
     unset($a['tag']);
+    $html_id = $a['id'];
+    unset($a['id']);
+    $carousel = $a['carousel'] ? 'carousel' : '';
+    unset($a['carousel']);
 
     foreach($a as $k => $v) {
       if (strpos($k, '_') === false) continue;
@@ -78,12 +86,12 @@ class FlexSlider_Attachments {
     $the_query = new WP_Query($args);
     $output = "";
     if ( $the_query->have_posts() ) {
-      $output .= '<div class="' . $this->id . ' flexslider carousel"><ul class="slides">';
+      $output .= '<div id="' . $html_id . '" class="' . $this->id . ' flexslider ' . $carousel . '"><ul class="slides">';
       while ( $the_query->have_posts() ) {
         $the_query->the_post();
         $output .= '<li>' . wp_get_attachment_image( get_the_ID(), "medium", false, ["class" => "no-lazy"] ) . '</li>';
       }
-      $output .= '</ul></div><script>jQuery(window).load(function() { jQuery(".' . $this->id . '").flexslider(' . json_encode($a) . ');});</script>';
+      $output .= '</ul></div><script>jQuery(window).load(function() { jQuery("#' . $html_id . '").flexslider(' . json_encode($a) . ');});</script>';
     }
     wp_reset_postdata();
 
