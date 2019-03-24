@@ -48,7 +48,9 @@ class FlexSlider_Attachments {
       'control_nav' => 'true',
       'direction_nav' => 'true',
       'slideshow_speed' => '7000',
-      'animation_speed' => '500'
+      'animation_speed' => '500',
+      'order' => 'ASC',
+      'orderby' => 'menu_order'
     ), $atts );
 
     // Convert bools
@@ -70,6 +72,10 @@ class FlexSlider_Attachments {
     unset($a['id']);
     $carousel = $a['carousel'] ? 'carousel' : '';
     unset($a['carousel']);
+    $order = $a['order'];
+    unset($a['order']);
+    $orderby = $a['orderby'];
+    unset($a['orderby']);
 
     foreach($a as $k => $v) {
       if (strpos($k, '_') === false) continue;
@@ -81,7 +87,9 @@ class FlexSlider_Attachments {
     $args = array(
       'post_type' => 'attachment',
       'tag' => $tag,
-      'post_status' => 'inherit'
+      'post_status' => 'inherit',
+      'order' => $order,
+      'orderby' => $orderby
     );
     $the_query = new WP_Query($args);
     $output = "";
