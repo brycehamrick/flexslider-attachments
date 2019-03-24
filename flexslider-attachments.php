@@ -29,11 +29,16 @@ class FlexSlider_Attachments {
     );
 
     add_action( 'init' , array( $this, 'add_taxonomy_to_media' ) );
+    add_action( 'admin_init' , array( $this, 'add_attributes_to_media' ) );
     add_shortcode('flexslider_attachments', array( $this, 'shortcode' ) );
   }
 
   public function add_taxonomy_to_media() {
     register_taxonomy_for_object_type( 'post_tag', 'attachment' );
+  }
+
+  public function add_attributes_to_media() {
+    add_post_type_support( 'attachment', 'page-attributes' );
   }
 
   public function shortcode($atts) {
