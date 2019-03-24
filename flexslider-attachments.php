@@ -40,28 +40,35 @@ class FlexSlider_Attachments {
     $a = shortcode_atts( array(
       'tag' => 'flexslider',
       'animation' => 'slide',
-      'animationLoop' => 'false',
-      'itemWidth' => '200',
-      'itemMargin' => '10',
-      'controlNav' => 'true',
-      'directionNav' => 'true',
-      'slideshowSpeed' => '7000',
-      'animationSpeed' => '500'
+      'animation_loop' => 'false',
+      'item_width' => '200',
+      'item_margin' => '10',
+      'control_nav' => 'true',
+      'direction_nav' => 'true',
+      'slideshow_speed' => '7000',
+      'animation_speed' => '500'
     ), $atts );
 
     // Convert bools
-    $a['animationLoop'] = $this->boolean($a['animationLoop']);
-    $a['controlNav'] = $this->boolean($a['controlNav']);
-    $a['directionNav'] = $this->boolean($a['directionNav']);
+    $a['animation_loop'] = $this->boolean($a['animation_loop']);
+    $a['control_nav'] = $this->boolean($a['control_nav']);
+    $a['direction_nav'] = $this->boolean($a['direction_nav']);
 
     // Convert ints
-    $a['itemWidth'] = intval($a['itemWidth']);
-    $a['itemMargin'] = intval($a['itemMargin']);
-    $a['slideshowSpeed'] = intval($a['slideshowSpeed']);
-    $a['animationSpeed'] = intval($a['animationSpeed']);
+    $a['item_width'] = intval($a['item_width']);
+    $a['item_margin'] = intval($a['item_margin']);
+    $a['slideshow_speed'] = intval($a['slideshow_speed']);
+    $a['animation_speed'] = intval($a['animation_speed']);
 
     $tag = $a['tag'];
     unset($a['tag']);
+
+    foreach($a as $k => $v) {
+      if (strpos($k, '_') === false) continue;
+
+      $a[$this->camelCase($k)] = $v;
+      unset($a[$k]);
+    }
 
     $args = array(
       'post_type' => 'attachment',
@@ -86,6 +93,18 @@ class FlexSlider_Attachments {
 
   private function boolean($str) {
     return (!$str || $str == 'false') ? false : true;
+  }
+
+  public static function camelCase($str) {
+    // non-alpha and non-numeric characters become spaces
+    $str = preg_replace('/[^a-z0-9' . implode("", []) . ']+/i', ' ', $str);
+    $str = trim($str);
+    // uppercase the first character of each word
+    $str = ucwords($str);
+    $str = str_replace(" ", "", $str);
+    $str = lcfirst($str);
+
+    return $str;
   }
 }
 $FlexSlider_Attachments = new FlexSlider_Attachments( __FILE__ );
