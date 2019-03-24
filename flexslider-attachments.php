@@ -88,4 +88,5 @@ class FlexSlider_Attachments {
     return (!$str || $str == 'false') ? false : true;
   }
 }
+$FlexSlider_Attachments = new FlexSlider_Attachments( __FILE__ );
 endif;
