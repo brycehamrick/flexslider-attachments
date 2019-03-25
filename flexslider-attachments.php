@@ -100,12 +100,32 @@ class FlexSlider_Attachments {
     $the_query = new WP_Query($args);
     $output = "";
     if ( $the_query->have_posts() ) {
-      $output .= '<div id="' . $html_id . '" class="' . $this->id . ' flexslider ' . $carousel . '"><ul class="slides">';
+      $output .= <<<OPEN
+      <div id="$html_id" class="{$this->id} flexslider $carousel">
+        <ul class="slides">
+OPEN;
       while ( $the_query->have_posts() ) {
         $the_query->the_post();
-        $output .= '<li>' . wp_get_attachment_image( get_the_ID(), "medium", false, ["class" => "no-lazy"] ) . '</li>';
+        $img = wp_get_attachment_image( get_the_ID(), "medium", false, ["class" => "no-lazy"] );
+        $output .= <<<ITEM
+          <li style="display:none">$img</li>
+ITEM;
       }
-      $output .= '</ul></div><script>jQuery(window).load(function() { jQuery("#' . $html_id . '").flexslider(' . json_encode($a) . ');});</script>';
+
+      $json = json_encode($a);
+      $output .= <<<CLOSE
+        </ul>
+      </div>
+      <script>
+        jQuery(window).load(function() {
+          var opts = $json;
+          opts.start = function(){
+            $("#$html_id li").show();
+          }
+          jQuery("#$html_id").flexslider(opts);
+        });
+      </script>
+CLOSE;
     }
     wp_reset_postdata();
 
