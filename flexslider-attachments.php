@@ -94,7 +94,8 @@ class FlexSlider_Attachments {
       'tag' => $tag,
       'post_status' => 'inherit',
       'order' => $order,
-      'orderby' => $orderby
+      'orderby' => $orderby,
+      'posts_per_page' -> -1
     );
     $the_query = new WP_Query($args);
     $output = "";
