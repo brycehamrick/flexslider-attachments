@@ -120,7 +120,7 @@ ITEM;
         jQuery(window).load(function() {
           var opts = $json;
           opts.start = function(){
-            $("#$html_id li").show();
+            jQuery("#$html_id li").show();
           }
           jQuery("#$html_id").flexslider(opts);
         });
