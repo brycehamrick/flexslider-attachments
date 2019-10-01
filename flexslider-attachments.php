@@ -107,8 +107,9 @@ OPEN;
       while ( $the_query->have_posts() ) {
         $the_query->the_post();
         $img = wp_get_attachment_image( get_the_ID(), "medium", false, ["class" => "no-lazy"] );
+        $link = get_post( get_the_ID() )->post_content;
         $output .= <<<ITEM
-          <li style="display:none">$img</li>
+          <li style="display:none"><a rel="me" href=$link>$img</a></li>
 ITEM;
       }
 
