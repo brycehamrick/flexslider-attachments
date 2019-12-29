@@ -45,6 +45,7 @@ class FlexSlider_Attachments {
 		$a = shortcode_atts( array(
 			'id' => $this->id,
 			'tag' => 'flexslider',
+			'link_field' => '',
 			'carousel' => 'true',
 			'animation' => 'slide',
 			'animation_loop' => 'false',
@@ -73,6 +74,8 @@ class FlexSlider_Attachments {
 		// Unset for JSON
 		$tag = $a['tag'];
 		unset($a['tag']);
+		$link_field = $a['link_field'];
+		unset($a['link_field']);
 		$html_id = $a['id'];
 		unset($a['id']);
 		$carousel = $a['carousel'] ? 'carousel' : '';
@@ -107,15 +110,14 @@ OPEN;
 			while ( $the_query->have_posts() ) {
 				$the_query->the_post();
 				$img = wp_get_attachment_image( get_the_ID(), "medium", false, ["class" => "no-lazy"] );
-				$brand_url = get_post_meta( get_the_ID(), 'featured_brand_url', true);
-				$brand_output = "";
-				if (filter_var($brand_url, FILTER_VALIDATE_URL)) {
-					$brand_output = "<a href='$brand_url' target='_blank'>$img</a>";
-				} else {
-					$brand_output = $img;
+				if (!empty($link_field)) {
+					$link_url = get_post_meta( get_the_ID(), $link_field, true);
+					if (filter_var($link_url, FILTER_VALIDATE_URL)) {
+						$img = "<a href='$link_url' target='_blank'>$img</a>";
+					}
 				}
 				$output .= <<<ITEM
-					<li style="display:none">$brand_output</li>
+					<li style="display:none">$img</li>
 ITEM;
 			}
 
