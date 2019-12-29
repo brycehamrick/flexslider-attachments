@@ -4,7 +4,7 @@
  * Plugin URI: https://bhamrick.com/
  * Description: Creates a FlexSlider out of WordPress Media items based on tags
  * Author: Bryce Hamrick
- * Version: 0.0.1
+ * Version: 0.0.2
  * Author URI: https://bhamrick.com/
  * License: GPL2
  * Text Domain: flexslider-attachments
