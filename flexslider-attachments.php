@@ -107,8 +107,15 @@ OPEN;
 			while ( $the_query->have_posts() ) {
 				$the_query->the_post();
 				$img = wp_get_attachment_image( get_the_ID(), "medium", false, ["class" => "no-lazy"] );
+				$brand_url = get_post_meta( get_the_ID(), 'featured_brand_url', true);
+				$brand_output = "";
+				if (filter_var($brand_url, FILTER_VALIDATE_URL)) {
+					$brand_output = "<a href='$brand_url' target='_blank'>$img</a>";
+				} else {
+					$brand_output = $img;
+				}
 				$output .= <<<ITEM
-					<li style="display:none">$img</li>
+					<li style="display:none">$brand_output</li>
 ITEM;
 			}
 
